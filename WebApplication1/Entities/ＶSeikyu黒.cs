@@ -1,0 +1,125 @@
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
+
+namespace Blazor.Server.Entities
+{
+    public partial class ＶSeikyu黒
+    {
+        public string コード { get; set; }
+        public string 区分 { get; set; }
+        public string 氏名コード { get; set; }
+        public string 氏名かな { get; set; }
+        public string 氏名漢字 { get; set; }
+        public string 性別 { get; set; }
+        public string 生年月日 { get; set; }
+        public string 年齢 { get; set; }
+        public string 社員コード { get; set; }
+        public string 所属コード { get; set; }
+        public string 健診種別 { get; set; }
+        public string 受診日 { get; set; }
+        public string 行為 { get; set; }
+        public string 受付番号 { get; set; }
+        public string 健保記号 { get; set; }
+        public string 健保番号 { get; set; }
+        public string 健診コース { get; set; }
+        public string 有害業務 { get; set; }
+        public string 特健項目 { get; set; }
+        public string Ｉｘ001 { get; set; }
+        public string Ｉｘ002 { get; set; }
+        public string Ｉｘ003 { get; set; }
+        public string Ｉｘ004 { get; set; }
+        public string Ｉｘ005 { get; set; }
+        public string Ｉｘ006 { get; set; }
+        public string Ｉｘ007 { get; set; }
+        public string Ｉｘ008 { get; set; }
+        public string Ｉｘ009 { get; set; }
+        public string Ｉｘ010 { get; set; }
+        public string Ｉｘ011 { get; set; }
+        public string Ｉｘ012 { get; set; }
+        public string Ｉｘ013 { get; set; }
+        public string Ｉｘ014 { get; set; }
+        public string Ｉｘ015 { get; set; }
+        public string Ｉｘ016 { get; set; }
+        public string Ｉｘ017 { get; set; }
+        public string Ｉｘ018 { get; set; }
+        public string Ｉｘ019 { get; set; }
+        public string Ｉｘ020 { get; set; }
+        public string Ｉｘ021 { get; set; }
+        public string Ｉｘ022 { get; set; }
+        public string Ｉｘ023 { get; set; }
+        public string Ｉｘ024 { get; set; }
+        public string Ｉｘ025 { get; set; }
+        public string Ｉｘ026 { get; set; }
+        public string Ｉｘ027 { get; set; }
+        public string Ｉｘ028 { get; set; }
+        public string Ｉｘ029 { get; set; }
+        public string Ｉｘ030 { get; set; }
+        public string Ｉｘ031 { get; set; }
+        public string Ｉｘ032 { get; set; }
+        public string Ｉｘ033 { get; set; }
+        public string Ｉｘ034 { get; set; }
+        public string Ｉｘ035 { get; set; }
+        public string Ｉｘ036 { get; set; }
+        public string Ｉｘ037 { get; set; }
+        public string Ｉｘ038 { get; set; }
+        public string Ｉｘ039 { get; set; }
+        public string Ｉｘ040 { get; set; }
+        public string Ｉｘ041 { get; set; }
+        public string Ｉｘ042 { get; set; }
+        public string Ｉｘ043 { get; set; }
+        public string Ｉｘ044 { get; set; }
+        public string Ｉｘ045 { get; set; }
+        public string Ｉｘ046 { get; set; }
+        public string Ｉｘ047 { get; set; }
+        public string Ｉｘ048 { get; set; }
+        public string Ｉｘ049 { get; set; }
+        public string Ｉｘ050 { get; set; }
+        public string Ｉｘ051 { get; set; }
+        public string Ｉｘ052 { get; set; }
+        public string Ｉｘ053 { get; set; }
+        public string Ｉｘ054 { get; set; }
+        public string Ｉｘ055 { get; set; }
+        public string Ｉｘ056 { get; set; }
+        public string Ｉｘ057 { get; set; }
+        public string Ｉｘ058 { get; set; }
+        public string Ｉｘ059 { get; set; }
+        public string Ｉｘ060 { get; set; }
+        public string Ｉｘ061 { get; set; }
+        public string Ｉｘ062 { get; set; }
+        public string Ｉｘ063 { get; set; }
+        public string Ｉｘ064 { get; set; }
+        public string Ｉｘ065 { get; set; }
+        public string Ｉｘ066 { get; set; }
+        public string Ｉｘ067 { get; set; }
+        public string Ｉｘ068 { get; set; }
+        public string Ｉｘ069 { get; set; }
+        public string Ｉｘ070 { get; set; }
+        public string Ｉｘ071 { get; set; }
+        public string Ｉｘ072 { get; set; }
+        public string Ｉｘ073 { get; set; }
+        public string Ｉｘ074 { get; set; }
+        public string Ｉｘ075 { get; set; }
+        public string Ｉｘ076 { get; set; }
+        public string Ｉｘ077 { get; set; }
+        public string Ｉｘ078 { get; set; }
+        public string Ｉｘ079 { get; set; }
+        public string Ｉｘ080 { get; set; }
+        public string Ｉｘ081 { get; set; }
+        public string Ｉｘ082 { get; set; }
+        public string Ｉｘ083 { get; set; }
+        public string Ｉｘ084 { get; set; }
+        public string Ｉｘ085 { get; set; }
+        public string Ｉｘ086 { get; set; }
+        public string Ｉｘ087 { get; set; }
+        public string Ｉｘ088 { get; set; }
+        public string Ｉｘ089 { get; set; }
+        public string Ｉｘ090 { get; set; }
+        public double? 番号 { get; set; }
+        public DateTime? Date { get; set; }
+        public int? 通し番号 { get; set; }
+        public int? 販売登録番号 { get; set; }
+        public int Id { get; set; }
+    }
+}
