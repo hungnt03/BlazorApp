@@ -63,7 +63,7 @@ namespace Blazor.Local.Services
 
         public async Task<IList<User>> GetAll()
         {
-            return await _httpService.Get<IList<User>>("/users");
+            return await _httpService.Get<IList<User>>("/api/auth/users");
         }
 
         public async Task<User> GetById(string id)

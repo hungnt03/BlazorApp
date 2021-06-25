@@ -9,10 +9,12 @@ using Blazor.Server.Identities;
 using Blazor.Shared.Identities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -81,6 +83,15 @@ namespace Blazor.Server.Controllers
             // Wait for token to get expired OR 
             // Maintain token cache and invalidate the tokens after logout method is called
             return Ok(new { Token = "", Message = "Logged Out" });
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Users")]
+        public async Task<IActionResult> Users()
+        {
+            var results = await userManager.Users.ToListAsync();
+            return Ok(new { results });
         }
 
         private async Task<IdentityUser> ValidateUser(LoginCredentials credentials)
