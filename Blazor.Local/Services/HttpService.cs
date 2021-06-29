@@ -128,7 +128,9 @@ namespace Blazor.Local.Services
             }
 
             await handleErrors(response);
-
+            Console.WriteLine("------------------------------------------------");
+            var result = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(result);
             var options = new JsonSerializerOptions();
             options.PropertyNameCaseInsensitive = true;
             options.Converters.Add(new StringConverter());

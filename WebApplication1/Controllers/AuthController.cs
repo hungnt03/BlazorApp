@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Blazor.Server.Identities;
+using Blazor.Shared;
 using Blazor.Shared.Identities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -88,10 +89,18 @@ namespace Blazor.Server.Controllers
         [Authorize]
         [HttpGet]
         [Route("Users")]
-        public async Task<IActionResult> Users()
+        public async Task<ActionResult<List<User>>> Users()
         {
-            var results = await userManager.Users.ToListAsync();
-            return Ok(new { results });
+            var users = await userManager.Users.ToListAsync();
+            var results = users.Select(x => new User() { 
+                FirstName = x.UserName,
+                LastName = x.UserName,
+                Id = x.Id,
+                Username = x.UserName,
+                IsDeleting = false
+            }).ToList();
+
+            return results;
         }
 
         private async Task<IdentityUser> ValidateUser(LoginCredentials credentials)
