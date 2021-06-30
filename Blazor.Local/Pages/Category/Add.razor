@@ -1,0 +1,54 @@
+﻿@page "/category/add"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@inject Blazor.Local.Services.IAlertService AlertService
+@inject Blazor.Local.Services.ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+<h1>Add User</h1>
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Name</label>
+            <InputText @bind-Value="model.Name" class="form-control" />
+            <ValidationMessage For="@(() => model.Name)" />
+        </div>
+        <div class="form-group col">
+            <label>Description</label>
+            <InputText @bind-Value="model.Description" class="form-control" />
+            <ValidationMessage For="@(() => model.Description)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <button disabled="@loading" class="btn btn-primary">
+            @if (loading)
+            {
+                <span class="spinner-border spinner-border-sm mr-1"></span>
+            }
+            Save
+        </button>
+        <NavLink href="categories" class="btn btn-link">Cancel</NavLink>
+    </div>
+</EditForm>
+
+@code {
+    private Blazor.Shared.Entities.Category model = new Blazor.Shared.Entities.Category();
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await CategoryService.Create(model);
+            AlertService.Success("Category added successfully", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("categories");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}

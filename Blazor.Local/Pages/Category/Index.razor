@@ -1,0 +1,61 @@
+﻿@page "/categories"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@inject Blazor.Local.Services.ICategoryService CategoryService
+
+<h1>Categories</h1>
+<NavLink href="category/add" class="btn btn-sm btn-success mb-2">Add Category</NavLink>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 30%">Name</th>
+            <th style="width: 60%">Description</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (categories != null)
+        {
+            foreach (var category in categories)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                    <td>@category.Description</td>
+                    <td style="white-space: nowrap">
+                        <NavLink href="@($"category/edit/{category.Id}")" class="btn btn-sm btn-primary mr-1">Edit</NavLink>
+                        <button @onclick="@(() => Delete(category.Id.ToString()))" class="btn btn-sm btn-danger btn-delete-user">
+                            <span>Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        @if (loading)
+        {
+            <tr>
+                <td colspan="4" class="text-center">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private bool loading;
+    private IList<Blazor.Shared.Entities.Category> categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        categories = await CategoryService.GetAll();
+        loading = false;
+    }
+
+    private async void Delete(string id)
+    {
+        var category = categories.First(x => x.Id.ToString().Equals(id));
+        await CategoryService.Delete(id);
+        categories.Remove(category);
+        StateHasChanged();
+    }
+}

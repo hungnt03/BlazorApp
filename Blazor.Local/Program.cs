@@ -19,7 +19,8 @@ namespace Blazor.Local
                 .AddScoped<IAccountService, AccountService>()
                 .AddScoped<IAlertService, AlertService>()
                 .AddScoped<IHttpService, HttpService>()
-                .AddScoped<ILocalStorageService, LocalStorageService>();
+                .AddScoped<ILocalStorageService, LocalStorageService>()
+                .AddScoped<ICategoryService, CategoryService>();
             // configure http client
             builder.Services.AddScoped(x => {
                 var apiUrl = new Uri(builder.Configuration["apiUrl"]);

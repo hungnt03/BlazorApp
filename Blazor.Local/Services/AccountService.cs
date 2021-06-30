@@ -1,4 +1,5 @@
 ﻿using Blazor.Shared;
+using Blazor.Shared.Commons;
 using Blazor.Shared.Identities;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
@@ -23,7 +24,6 @@ namespace Blazor.Local.Services
         private IHttpService _httpService;
         private NavigationManager _navigationManager;
         private ILocalStorageService _localStorageService;
-        private string _userKey = "user";
 
         public User User { get; private set; }
 
@@ -40,25 +40,26 @@ namespace Blazor.Local.Services
 
         public async Task Initialize()
         {
-            User = await _localStorageService.GetItem<User>(_userKey);
+            User = await _localStorageService.GetItem<User>(StringUtil.USER_KEY);
         }
 
         public async Task Login(LoginCredentials model)
         {
             User = await _httpService.Post<User>("/api/auth/login", model);
-            await _localStorageService.SetItem(_userKey, User);
+            User.Username = model.Username;
+            await _localStorageService.SetItem(StringUtil.USER_KEY, User);
         }
 
         public async Task Logout()
         {
             User = null;
-            await _localStorageService.RemoveItem(_userKey);
+            await _localStorageService.RemoveItem(StringUtil.USER_KEY);
             _navigationManager.NavigateTo("account/login");
         }
 
         public async Task Register(UserDetails model)
         {
-            await _httpService.Post("/users/register", model);
+            await _httpService.Post("/api/auth/register", model);
         }
 
         public async Task<IList<User>> GetAll()
@@ -82,7 +83,7 @@ namespace Blazor.Local.Services
                 User.FirstName = model.FirstName;
                 User.LastName = model.LastName;
                 User.Username = model.Username;
-                await _localStorageService.SetItem(_userKey, User);
+                await _localStorageService.SetItem(StringUtil.USER_KEY, User);
             }
         }
 
