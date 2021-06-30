@@ -1,34 +1,31 @@
 ﻿@inherits LayoutComponentBase
+@inject Blazor.Local.Services.IAccountService AccountService
+@inject NavigationManager NavigationManager
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    @if (LoggedIn)
+    {
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    }
 
-    <div class="main">
+    <div class="main app-container content px-4 @(LoggedIn ? "bg-light" : "")">
         <nav class="top-row navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">Home</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="http://blazor.net" target="_blank">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/account/logout">Logout</a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                <NavLink href="" Match="NavLinkMatch.All" class="nav-item nav-link">Home</NavLink>
+                <NavLink href="users" class="nav-item nav-link">Users</NavLink>
+                <NavLink href="account/logout" class="nav-item nav-link">Logout</NavLink>
             </div>
         </nav>
-        <div class="content px-4">
-            @Body
-        </div>
+        <Alert />
+        @Body
     </div>
 </div>
+
+@code {
+    public bool LoggedIn
+    {
+        get { return AccountService.User != null; }
+    }
+}
