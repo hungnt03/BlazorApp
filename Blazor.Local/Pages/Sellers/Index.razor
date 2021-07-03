@@ -1,0 +1,99 @@
+﻿@page "/sellers"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@inject Blazor.Local.Services.ISellerService SellerService
+@using Blazor.Shared.Others
+@using Blazor.Shared.Commons
+
+<style>
+</style>
+<div class="row">
+    <div class="col-12 mt-2">
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" @bind="Condition" @bind:event="oninput" @onkeyup="KeyboardEventHandler">
+                    <button class="btn btn-outline-success" type="button" @onclick="@Search">Search</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+    <div class="col-12 body-selles row">
+        <div class="col-6">
+            <ProductBuyed @bind-Datas="@sellerDetails" OnClickUp="AddQuantity" OnClickDown="SubQuantity"/>
+
+        </div>
+        <div class="col-6 d-flex align-content-start flex-wrap">
+            <ProductCard @bind-Datas="@productsSearch" OnClick="AddBuyedHandler"/>
+            @if (loading)
+            {
+                <tr>
+                    <td colspan="4" class="text-center">
+                        <span class="spinner-border spinner-border-lg align-center"></span>
+                    </td>
+                </tr>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool loading;
+    private IList<Product> productsSearch;
+    private IList<SellerDetail> sellerDetails;
+    private string Condition;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        productsSearch = await SellerService.GetDefaultProducts();
+        loading = false;
+
+        sellerDetails = new List<SellerDetail>();
+    }
+
+    private async void Search()
+    {
+        var results = await SellerService.SearchProducts(Condition);
+        if (results == null) return;
+        if (results.Count == 1 && StringUtil.IsNumberic(Condition))
+        {
+            var detail = new SellerDetail(results[0]);
+            if (sellerDetails.Any(x => x.Barcode.Equals(detail.Barcode)))
+                sellerDetails.Where(x => x.Barcode.Equals(detail.Barcode)).First().Quantity += 1;
+            else
+                sellerDetails.Add(new SellerDetail(results[0]));
+        }
+        else
+        {
+            productsSearch = results;
+        }
+    }
+
+    private void KeyboardEventHandler(KeyboardEventArgs args)
+    {
+        if (Condition.Length == 13 && StringUtil.IsNumberic(Condition)) Search();
+    }
+
+    private async void AddBuyedHandler(string barcode)
+    {
+        var results = await SellerService.SearchProducts(barcode);
+        var detail = new SellerDetail(results[0]);
+        if (sellerDetails.Any(x => x.Barcode.Equals(detail.Barcode)))
+            sellerDetails.Where(x => x.Barcode.Equals(detail.Barcode)).First().Quantity += 1;
+        else
+            sellerDetails.Add(new SellerDetail(results[0]));
+    }
+
+    private void AddQuantity(string barcode)
+    {
+        if (sellerDetails.Any(x => x.Barcode.Equals(barcode)))
+            sellerDetails.Where(x => x.Barcode.Equals(barcode)).First().Quantity += 1;
+    }
+
+    private void SubQuantity(string barcode)
+    {
+        var currQuantity = sellerDetails.Where(x => x.Barcode.Equals(barcode)).First().Quantity;
+        if (currQuantity == 1) return;
+        sellerDetails.Where(x => x.Barcode.Equals(barcode)).First().Quantity -= 1;
+    }
+}

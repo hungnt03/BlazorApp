@@ -1,0 +1,66 @@
+﻿@using Blazor.Shared.Others
+
+<style>
+    .d-flex.flex-column {
+        margin-top: -5px;
+    }
+
+    span.quantity > svg:hover {
+        font-size: larger;
+    }
+
+    span.quantity{
+        height: 15px;
+    }
+</style>
+<div class="col-12">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tên sản phẩm</th>
+                <th scope="col">Số lượng</th>
+                <th scope="col"></th>
+                <th scope="col">Đơn giá</th>
+                <th scope="col">Thành tiền</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Datas != null && Datas.Count > 0)
+            {
+                var idx = 1;
+                foreach (SellerDetail data in Datas)
+                {
+                    <tr>
+                        <th scope="row">@idx</th>
+                        <td>@data.ProductName</td>
+                        <td>@data.Quantity</td>
+                        <th>
+                            <div class="d-flex flex-column">
+                                <span @onclick="@(() => OnClickUp.InvokeAsync(data.Barcode))" class="quantity quantity-up"><i class="fas fa-angle-up"></i></span>
+                                <span @onclick="@(() => OnClickDown.InvokeAsync(data.Barcode))" class="quantity quantity-down"><i class="fas fa-angle-down"></i></span>
+                            </div>
+                        </th>
+                        <td>@data.Price</td>
+                        <td>@data.Amount</td>
+                    </tr>
+                    idx++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+@code {
+    [Parameter]
+    public IList<SellerDetail> Datas { set; get; }
+
+    [Parameter]
+    public EventCallback<IList<SellerDetail>> DatasChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnClickUp { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnClickDown { get; set; }
+}

@@ -9,5 +9,10 @@ namespace Blazor.Shared.Commons
     public static class StringUtil
     {
         public const string USER_KEY = "user";
+
+        public static bool IsNumberic(string value)
+        {
+            return value.All(char.IsNumber);
+        }
     }
 }
