@@ -1,0 +1,65 @@
+﻿@page "/products"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@inject Blazor.Local.Services.IProductService ProductService
+
+<h1>Categories</h1>
+<NavLink href="product/add" class="btn btn-sm btn-success mb-2">Add Category</NavLink>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 50%">Tên sản phẩm</th>
+            <th style="width: 20%">Giá bán</th>
+            <th style="width: 10%">Số lượng</th>
+            <th style="width: 10%">Đơn vị</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (products != null)
+        {
+            foreach (var product in products)
+            {
+        <tr>
+            <td>@product.Name</td>
+            <td>@StringUtil.ToCurrency(product.Price)</td>
+            <td>@product.Quantity</td>
+            <td>@product.UnitName</td>
+            <td style="white-space: nowrap">
+                <NavLink href="@($"category/edit/{product.Barcode}")" class="btn btn-sm btn-primary mr-1">Edit</NavLink>
+                <button @onclick="@(() => Delete(product.Barcode))" class="btn btn-sm btn-danger btn-delete-user">
+                    <span>Delete</span>
+                </button>
+            </td>
+        </tr>
+            }
+        }
+        @if (loading)
+        {
+            <tr>
+                <td colspan="4" class="text-center">
+                    <span class="spinner-border spinner-border-lg align-center"></span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private bool loading;
+    private IList<ProductModel> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        products = await ProductService.GetAll();
+        loading = false;
+    }
+
+    private async void Delete(string id)
+    {
+        var product = products.First(x => x.Barcode.ToString().Equals(id));
+        await ProductService.Delete(id);
+        products.Remove(product);
+        StateHasChanged();
+    }
+}

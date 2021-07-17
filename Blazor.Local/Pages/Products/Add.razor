@@ -1,0 +1,137 @@
+﻿@page "/product/add"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@inject Blazor.Local.Services.IAlertService AlertService
+@inject Blazor.Local.Services.IProductService ProductService
+@inject Blazor.Local.Services.IUnitService UnitService
+@inject Blazor.Local.Services.ISupplierService SupplierService
+@inject Blazor.Local.Services.ICategoryService CategoryService
+@inject NavigationManager NavigationManager
+
+<!--<h1>Add User</h1>
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Barcode</label>
+            <InputText @bind-Value="model.Barcode" class="form-control" />
+            <ValidationMessage For="@(() => model.Barcode)" />
+        </div>
+        <div class="form-group col">
+            <label>Tên sản phẩm</label>
+            <InputText @bind-Value="model.Name" class="form-control" />
+            <ValidationMessage For="@(() => model.Name)" />
+        </div>
+        <div class="form-group col">
+            <label>Giá nhập</label>
+            <InputNumber @bind-Value="model.PriceBuy" class="form-control" />
+            <ValidationMessage For="@(() => model.PriceBuy)" />
+        </div>
+        <div class="form-group col">
+            <label>Giá bán</label>
+            <InputNumber @bind-Value="model.Price" class="form-control" />
+            <ValidationMessage For="@(() => model.Price)" />
+        </div>
+        <div class="form-group col">
+            <label>Tiền lãi</label>
+            <InputNumber @bind-Value="model.Interest.Value" class="form-control" />
+        </div>
+        <div class="form-group col">
+            <label>Chủng loại</label>
+            <InputSelect @bind-Value="model.CategoryId" class="form-control">
+                @foreach (var category in categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => model.CategoryId)" />
+        </div>
+        <div class="form-group col">
+            <label>Đơn vị</label>
+            <InputSelect @bind-Value="model.Unit" class="form-control">
+                @foreach (var unit in units)
+                {
+                    <option value="@unit.Id">@unit.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => model.Unit)" />
+        </div>
+        <div class="form-group col">
+            <label>Đơn vị giao hàng</label>
+            <InputSelect @bind-Value="model.SupplierId" class="form-control">
+                @foreach (var supplier in suppliers)
+                {
+                    <option value="@supplier.Id">@supplier.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => model.SupplierId)" />
+        </div>
+        <div class="form-group col">
+            <label>Hạn sử dụng</label>
+            <InputDate @bind-Value="model.ExpirationDate" class="form-control" />
+            <ValidationMessage For="@(() => model.ExpirationDate)" />
+        </div>
+        <div class="form-group col">
+            <label>Đang bán</label>
+            <InputCheckbox @bind-Value="model.Enable" class="form-control" />-->
+            @*<ValidationMessage For="@(() => model.Enable)" />*@
+        <!--</div>
+        <div class="form-group col">
+            <label>Pin</label>
+            <InputCheckbox @bind-Value="model.Pin.Value" class="form-control" />-->
+            @*<ValidationMessage For="@(() => model.Pin)" />*@
+        <!--</div>
+        <div class="form-group col">
+            <label>Description</label>
+            <InputFile OnChange="@OnInputFileChange" multiple />
+        </div>
+    </div>
+    <div class="form-group">
+        <button disabled="@loading" class="btn btn-primary">
+            @if (loading)
+            {
+                <span class="spinner-border spinner-border-sm mr-1"></span>
+            }
+            Save
+        </button>
+        <NavLink href="products" class="btn btn-link">Cancel</NavLink>
+    </div>
+</EditForm>-->
+
+@code {
+    private ProductModel model = new ProductModel();
+    private bool loading;
+    private IList<Unit> units;
+    private IList<Supplier> suppliers;
+    private IList<Category> categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        units = await UnitService.GetAll();
+        suppliers = await SupplierService.GetAll();
+        categories = await CategoryService.GetAll();
+        loading = false;
+    }
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await ProductService.Create(model);
+            AlertService.Success("Product added successfully", keepAfterRouteChange: true);
+            NavigationManager.NavigateTo("products");
+        }
+        catch (Exception ex)
+        {
+            AlertService.Error(ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+
+    }
+}

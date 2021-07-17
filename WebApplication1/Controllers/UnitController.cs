@@ -12,41 +12,41 @@ namespace Blazor.Server.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CategoriesController : ControllerBase
+    public class UnitController : ControllerBase
     {
         private readonly HungTestContext _db;
-        public CategoriesController(HungTestContext db)
+        public UnitController(HungTestContext db)
         {
             _db = db;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> GetCategories()
+        public async Task<ActionResult<List<Unit>>> GetUnits()
         {
-            return await _db.Categories.OrderBy(x => x.Name).ToListAsync();
+            return await _db.Units.OrderBy(x => x.Name).ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<Unit>> GetUnit(int id)
         {
-            var result = await _db.Categories.FindAsync(id);
+            var result = await _db.Units.FindAsync(id);
             if (result == null) return NotFound();
             return result;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> CreateCategory(Category category)
+        public async Task<ActionResult<Unit>> CreateUnit(Unit Unit)
         {
-            _db.Categories.Add(category);
+            _db.Units.Add(Unit);
             await _db.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetCategories), new { id = category.Id }, category);
+            return CreatedAtAction(nameof(GetUnits), new { id = Unit.Id }, Unit);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, Category category)
+        public async Task<IActionResult> UpdateUnit(int id, Unit Unit)
         {
-            if (id != category.Id) return BadRequest();
-            _db.Entry(category).State = EntityState.Modified;
+            if (id != Unit.Id) return BadRequest();
+            _db.Entry(Unit).State = EntityState.Modified;
             try
             {
                 await _db.SaveChangesAsync();
@@ -60,11 +60,11 @@ namespace Blazor.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteUnit(int id)
         {
-            var result = await _db.Categories.FindAsync(id);
+            var result = await _db.Units.FindAsync(id);
             if (result == null) return NotFound();
-            _db.Categories.Remove(result);
+            _db.Units.Remove(result);
             await _db.SaveChangesAsync();
 
             return NoContent();
@@ -72,7 +72,7 @@ namespace Blazor.Server.Controllers
 
         private bool IsExists(int id)
         {
-            return _db.Categories.Any(x => x.Id == id);
+            return _db.Units.Any(x => x.Id == id);
         }
     }
 }

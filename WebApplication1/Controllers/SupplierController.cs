@@ -7,46 +7,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace Blazor.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class CategoriesController : ControllerBase
+    public class SupplierController : ControllerBase
     {
         private readonly HungTestContext _db;
-        public CategoriesController(HungTestContext db)
+        public SupplierController(HungTestContext db)
         {
             _db = db;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> GetCategories()
+        public async Task<ActionResult<List<Supplier>>> GetSuppliers()
         {
-            return await _db.Categories.OrderBy(x => x.Name).ToListAsync();
+            return await _db.Suppliers.OrderBy(x => x.Name).ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<Supplier>> GetSupplier(int id)
         {
-            var result = await _db.Categories.FindAsync(id);
+            var result = await _db.Suppliers.FindAsync(id);
             if (result == null) return NotFound();
             return result;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> CreateCategory(Category category)
+        public async Task<ActionResult<Supplier>> CreateSupplier(Supplier Supplier)
         {
-            _db.Categories.Add(category);
+            _db.Suppliers.Add(Supplier);
             await _db.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetCategories), new { id = category.Id }, category);
+            return CreatedAtAction(nameof(GetSuppliers), new { id = Supplier.Id }, Supplier);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, Category category)
+        public async Task<IActionResult> UpdateSupplier(int id, Supplier Supplier)
         {
-            if (id != category.Id) return BadRequest();
-            _db.Entry(category).State = EntityState.Modified;
+            if (id != Supplier.Id) return BadRequest();
+            _db.Entry(Supplier).State = EntityState.Modified;
             try
             {
                 await _db.SaveChangesAsync();
@@ -60,11 +60,11 @@ namespace Blazor.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteSupplier(int id)
         {
-            var result = await _db.Categories.FindAsync(id);
+            var result = await _db.Suppliers.FindAsync(id);
             if (result == null) return NotFound();
-            _db.Categories.Remove(result);
+            _db.Suppliers.Remove(result);
             await _db.SaveChangesAsync();
 
             return NoContent();
@@ -72,7 +72,7 @@ namespace Blazor.Server.Controllers
 
         private bool IsExists(int id)
         {
-            return _db.Categories.Any(x => x.Id == id);
+            return _db.Suppliers.Any(x => x.Id == id);
         }
     }
 }

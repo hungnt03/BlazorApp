@@ -5,25 +5,34 @@
         margin-top: -5px;
     }
 
-    span.quantity > svg:hover {
+/*    span.quantity > svg:hover {
         font-size: larger;
-    }
+    }*/
 
     span.quantity{
         height: 15px;
     }
+
+    div.product-buyed{
+        max-height: 500px;
+        overflow-y: scroll;
+    }
+
+/*    tr:hover > span.cancel {
+        display: block;
+    }*/
 </style>
-<div class="col-12">
+<div class="col-12 product-buyed">
     <table class="table">
         <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Tên sản phẩm</th>
-                <th scope="col">Số lượng</th>
-                <th scope="col"></th>
-                <th scope="col">Đơn giá</th>
-                <th scope="col">Thành tiền</th>
-                <th scope="col"></th>
+            <tr class="d-flex">
+                <th scope="col" class="col-1">#</th>
+                <th scope="col" class="col-4">Tên sản phẩm</th>
+                <th scope="col" class="col-1">Số lượng</th>
+                <th scope="col" class="col-1"></th>
+                <th scope="col" class="col-2">Đơn giá</th>
+                <th scope="col" class="col-2">Thành tiền</th>
+                <th scope="col" class="col-1"></th>
             </tr>
         </thead>
         <tbody>
@@ -32,18 +41,19 @@
                 var idx = 1;
                 foreach (SellerDetail data in Datas)
                 {
-                    <tr>
-                        <th scope="row">@idx</th>
-                        <td>@data.ProductName</td>
-                        <td>@data.Quantity</td>
-                        <th>
+                    <tr class="d-flex">
+                        <td scope="row" class="col-sm-1">@idx</td>
+                        <td scope="row" class="col-sm-4">@data.ProductName</td>
+                        <td scope="row" class="col-sm-1">@data.Quantity</td>
+                        <td scope="row" class="col-sm-1">
                             <div class="d-flex flex-column">
-                                <span @onclick="@(() => OnClickUp.InvokeAsync(data.Barcode))" class="quantity quantity-up"><i class="fas fa-angle-up"></i></span>
-                                <span @onclick="@(() => OnClickDown.InvokeAsync(data.Barcode))" class="quantity quantity-down"><i class="fas fa-angle-down"></i></span>
+                                <span @onclick="@(() => OnDatasChanged(data.Barcode,1))" class="quantity quantity-up"><i class="fas fa-angle-up"></i></span>
+                                <span @onclick="@(() => OnDatasChanged(data.Barcode,0))" class="quantity quantity-down"><i class="fas fa-angle-down"></i></span>
                             </div>
-                        </th>
-                        <td>@data.Price</td>
-                        <td>@data.Amount</td>
+                        </td>
+                        <td scope="row" class="col-sm-2">@StringUtil.ToCurrency(data.Price)</td>
+                        <td scope="row" class="col-sm-2">@StringUtil.ToCurrency(data.Amount)</td>
+                        <td scope="row" class="col-sm-1"><span @onclick="@(() => OnDatasChanged(data.Barcode,2))" class="quantity"><i class="fas fa-times"></i></span></td>
                     </tr>
                     idx++;
                 }
@@ -58,9 +68,26 @@
     [Parameter]
     public EventCallback<IList<SellerDetail>> DatasChanged { get; set; }
 
-    [Parameter]
-    public EventCallback<string> OnClickUp { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="barcode"></param>
+    /// <param name="type">1: up, 0: down, 2: delete</param>
+    /// <returns></returns>
+    private Task OnDatasChanged(string barcode, int type)
+    {
+        int unit = 0;
+        if (type == 0) unit = -1;
+        if (type == 1) unit = 1;
 
-    [Parameter]
-    public EventCallback<string> OnClickDown { get; set; }
+        if (Datas.Any(x => x.Barcode.Equals(barcode)))
+        {
+            if (Datas.Where(x => x.Barcode.Equals(barcode)).First().Quantity == 1 && type == 0) return Task.CompletedTask;
+            var data = Datas.Where(x => x.Barcode.Equals(barcode)).First();
+            data.Quantity += unit;
+            if (type == 2) Datas.Remove(data);
+            return DatasChanged.InvokeAsync(Datas);
+        }
+        return Task.CompletedTask;
+    }
 }

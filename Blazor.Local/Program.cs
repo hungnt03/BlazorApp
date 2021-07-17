@@ -21,6 +21,9 @@ namespace Blazor.Local
                 .AddScoped<IHttpService, HttpService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>()
                 .AddScoped<ICategoryService, CategoryService>()
+                .AddScoped<IProductService, ProductService>()
+                .AddScoped<IUnitService, UnitService>()
+                .AddScoped<ISupplierService, SupplierService>()
                 .AddScoped<ISellerService, SellerService>();
             // configure http client
             builder.Services.AddScoped(x => {
